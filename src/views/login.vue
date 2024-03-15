@@ -62,6 +62,7 @@
 <script setup>
 import { ref } from "vue";
 import { useRouter } from "vue-router";
+import { loginUser } from "../api/auth.js"; //Impor fungsi loginUser dari modul autentikasi API
 
 const router = useRouter();
 const loginEmail = ref("");
@@ -69,30 +70,13 @@ const loginPassword = ref("");
 const loginError = ref(null);
 
 const login = async () => {
-  try {
-    const response = await fetch("https://dummyjson.com/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        username: loginEmail.value,
-        password: loginPassword.value,
-      }),
-    });
-    if (response.ok) {
-      const data = await response.json();
-      localStorage.setItem("token", data.token); //Simpan token ke dalam localStorage
-      router.push("/home"); //Redirect ke halaman home
-    } else {
-      const errorData = await response.json(); //Login gagal, coba ambil pesan kesalahan dari respons API
-      if (errorData && errorData.message) {
-        loginError.value = errorData.message;
-      } else {
-        loginError.value = "Username atau password salah";
-      }
-    }
-  } catch (error) {
-    console.error("Error:", error); //Tampilkan pesan kesalahan jika terjadi error
-    loginError.value = "Terjadi kesalahan saat melakukan login";
+  const response = await loginUser(loginEmail.value, loginPassword.value); //Memanggil fungsi loginUser dan menunggu responsenya
+  if (response.success) {
+    //Jika login berhasil, redirect ke halaman home
+    router.push("/home");
+  } else {
+    //Jika login gagal, tampilkan pesan kesalahan
+    loginError.value = response.error;
   }
 };
 </script>
