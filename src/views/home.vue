@@ -4,8 +4,8 @@ import { RouterLink, useRouter } from "vue-router";
 const router = useRouter();
 
 const logout = () => {
-  localStorage.removeItem("token"); // Hapus token dari localStorage
-  router.push({ name: "login" }); // Redirect ke halaman login
+  localStorage.removeItem("token"); //Hapus token dari localStorage
+  router.push({ name: "login" }); //Redirect ke halaman login
 };
 </script>
 

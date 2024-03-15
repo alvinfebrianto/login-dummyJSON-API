@@ -16,9 +16,9 @@ const router = createRouter({
       beforeEnter: (to, from, next) => {
         const token = localStorage.getItem("token");
         if (!token) {
-          next({ name: "login" }); // Jika tidak ada token, redirect ke halaman login
+          next({ name: "login" }); //Jika tidak ada token, redirect ke halaman login
         } else {
-          // Lakukan pengecekan token di API menggunakan fetch
+          //Lakukan pengecekan token di API menggunakan fetch
           fetch("https://dummyjson.com/users", {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -26,14 +26,14 @@ const router = createRouter({
           })
             .then((response) => {
               if (response.ok) {
-                next(); // Jika token valid, biarkan user masuk
+                next(); //Jika token valid, biarkan user masuk
               } else {
-                next({ name: "login" }); // Jika token tidak valid, redirect ke halaman login
+                next({ name: "login" }); //Jika token tidak valid, redirect ke halaman login
               }
             })
             .catch((error) => {
               console.error("Error checking token:", error);
-              next({ name: "login" }); // Jika terjadi kesalahan, redirect ke halaman login
+              next({ name: "login" }); //Jika terjadi kesalahan, redirect ke halaman login
             });
         }
       },
