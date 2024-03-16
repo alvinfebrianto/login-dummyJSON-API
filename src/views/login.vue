@@ -22,7 +22,6 @@
                 id="username"
                 class="peer bg-transparent w-full px-4 py-3 rounded-md border-2 placeholder:text-neutral-800/50 outline-none dark:placeholder:text-neutral-400 dark:bg-zinc-800 border-neutral-400 focus:border-neutral-600 ring-neutral-100 dark:border-neutral-600 dark:focus:border-white dark:ring-0"
                 placeholder="Username"
-                required
               /><label
                 for="username"
                 class="absolute cursor-text left-2 -top-3 text-sm text-neutral-800/50 dark:text-neutral-300 bg-inherit mx-1 px-1 peer-placeholder-shown:text-base peer-placeholder-shown:text-neutral-800/50 dark:peer-placeholder-shown:text-neutral-400 peer-placeholder-shown:top-3 peer-focus:-top-3 peer-focus:text-sky-600 dark:peer-focus:text-sky-600 peer-focus:text-sm transition-all"
@@ -38,7 +37,6 @@
                 id="password"
                 class="peer bg-transparent w-full px-4 py-3 rounded-md border-2 placeholder:text-neutral-800/50 outline-none dark:placeholder:text-neutral-400 dark:bg-zinc-800 border-neutral-400 focus:border-neutral-600 ring-neutral-100 dark:border-neutral-600 dark:focus:border-white dark:ring-0"
                 placeholder="Password"
-                required
               /><label
                 for="password"
                 class="absolute cursor-text left-2 -top-3 text-sm text-neutral-800/50 dark:text-neutral-300 bg-inherit mx-1 px-1 peer-placeholder-shown:text-base peer-placeholder-shown:text-neutral-800/50 dark:peer-placeholder-shown:text-neutral-400 peer-placeholder-shown:top-3 peer-focus:-top-3 peer-focus:text-sky-600 dark:peer-focus:text-sky-600 peer-focus:text-sm transition-all"
@@ -63,6 +61,7 @@
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { loginUser } from "../api/auth.js"; //Impor fungsi loginUser dari modul autentikasi API
+import swal from "sweetalert";
 
 const router = useRouter();
 const loginEmail = ref("");
@@ -70,6 +69,12 @@ const loginPassword = ref("");
 const loginError = ref(null);
 
 const login = async () => {
+  //Periksa apakah form telah diisi
+  if (!loginEmail.value || !loginPassword.value) {
+    //Tampilkan pesan SweetAlert jika form tidak valid
+    swal("Error", "Mohon Isi Username dan Password", "error");
+    return;
+  }
   const response = await loginUser(loginEmail.value, loginPassword.value); //Memanggil fungsi loginUser dan menunggu responsenya
   if (response.success) {
     //Jika login berhasil, redirect ke halaman home
